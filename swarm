@@ -20,3 +20,6 @@ This node joined a swarm as a worker.
 在swarm-worker2上
 [root@swarm-worker2 ~]# docker swarm join --token SWMTKN-1-07w0qpwu5819g1k38no24l4y6n6m1s1zoz8m0l2xxrcem6l5r9-6fqcn83cke3udbwqxtenhv6q4 192.168.224.152:2377
 This node joined a swarm as a worker.
+
+
+***在swam中不用docker run,而是用docker services
