@@ -1,0 +1,22 @@
+在swarm-manager上
+
+[root@swarm-manager ~]# docker swarm init --advertise-addr=192.168.224.152
+Swarm initialized: current node (29mzp1pdzj0yivhlb4cdby3p5) is now a manager.
+
+To add a worker to this swarm, run the following command:
+
+    docker swarm join --token SWMTKN-1-07w0qpwu5819g1k38no24l4y6n6m1s1zoz8m0l2xxrcem6l5r9-6fqcn83cke3udbwqxtenhv6q4 192.168.224.152:2377
+
+To add a manager to this swarm, run 'docker swarm join-token manager' and follow the instructions.
+
+
+
+在swarm-worker1上
+
+[root@swarm-worker1 ~]# docker swarm join --token SWMTKN-1-07w0qpwu5819g1k38no24l4y6n6m1s1zoz8m0l2xxrcem6l5r9-6fqcn83cke3udbwqxtenhv6q4 192.168.224.152:2377
+This node joined a swarm as a worker.
+
+
+在swarm-worker2上
+[root@swarm-worker2 ~]# docker swarm join --token SWMTKN-1-07w0qpwu5819g1k38no24l4y6n6m1s1zoz8m0l2xxrcem6l5r9-6fqcn83cke3udbwqxtenhv6q4 192.168.224.152:2377
+This node joined a swarm as a worker.
