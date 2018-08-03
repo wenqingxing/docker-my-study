@@ -14,8 +14,8 @@ sudo yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/cen
 
 
 开启
-sudo yum-config-manager --enable docker-ce-edge
-sudo yum-config-manager --enable docker-ce-test
+#sudo yum-config-manager --enable docker-ce-edge
+#sudo yum-config-manager --enable docker-ce-test
 
 关闭
 #sudo yum-config-manager --disable docker-ce-edge
