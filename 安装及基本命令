@@ -2,15 +2,16 @@
 
 https://docs.docker.com/install/linux/docker-ce/centos/
 
-==========安装开始==========
+==========安装.启动开始==========
 
 sudo yum install -y yum-utils device-mapper-persistent-data lvm2
 sudo yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
 sudo yum install docker-ce -y
+systemctl daemon-reload
+sudo service docker start
+service docker status
 
-==========安装结束==========
-
-
+==========安装.启动完成==========
 
 
 
@@ -34,10 +35,7 @@ cd /opt
 git clone https://github.com/docker-training/webapp.git
 cd webapp
 
-启动docker
-systemctl daemon-reload
-sudo service docker start
-service docker status
+
 
 编译
 docker build -f Dockerfile -t 13660129620/webapp .
