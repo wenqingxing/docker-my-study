@@ -1,0 +1,405 @@
+官方安装手册
+
+https://docs.docker.com/install/linux/docker-ce/centos/
+
+
+sudo yum install -y yum-utils \
+  device-mapper-persistent-data \
+  lvm2
+
+
+ #sudo yum-config-manager     --add-repo     https://download.docker.com/linux/centos/docker-ce.repo
+
+sudo yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+
+
+开启
+sudo yum-config-manager --enable docker-ce-edge
+sudo yum-config-manager --enable docker-ce-test
+
+关闭
+#sudo yum-config-manager --disable docker-ce-edge
+
+sudo rpm -i http://dl.fedoraproject.org/pub/epel/7/x86_64/Packages/e/epel-release-7-11.noarch.rpm
+
+
+sudo yum install docker-ce
+
+
+yum install -y git
+cd /opt
+git clone https://github.com/docker-training/webapp.git
+cd webapp
+
+启动docker
+systemctl daemon-reload
+sudo service docker start
+service docker status
+
+编译
+docker build -f Dockerfile -t 13660129620/webapp .
+
+注意这里的标签13660129620一定要是docker hup的用户名，否则会推送不上去
+
+查看编译好的镜像
+
+docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+13660129620/webapp    latest              a1d6b07d304f        5 hours ago         396MB
+ubuntu              14.04               8cef1fa16c77        2 weeks ago         223MB
+
+注册账号
+https://hub.docker.com/
+
+13660129620
+qq邮箱
+惯用密码
+
+
+
+登陆
+ docker login
+ 输入docker的账号密码，提示Login Succeeded
+
+
+将刚才编译的13660129620/webapp 镜像推到docker hub
+docker push 13660129620/webapp
+
+
+
+
+从docker hub拉取docker镜像
+
+1 清空现有docker宿主机镜像
+	docker rmi 13660129620/webapp
+
+2 docker pull 下载镜像
+	docker pull 13660129620/webapp
+
+3 确认是否下载成功
+	docker images
+
+[root@143 webapp]# docker images
+REPOSITORY           TAG                 IMAGE ID            CREATED             SIZE
+13660129620/webapp   latest              a1d6b07d304f        7 hours ago         396MB
+
+
+
+
+[root@143 ~]# docker ps
+CONTAINER ID        IMAGE                COMMAND             CREATED             STATUS              PORTS                     NAMES
+92a5f52712f3        13660129620/webapp   "python app.py"     3 days ago          Up 3 days           4000-4500/tcp, 5000/tcp   app
+09c4d54ef10e        13660129620/webapp   "python app.py"     3 days ago          Up 3 days           5000/tcp                  ourapp
+
+
+
+docker run --help
+Usage:	docker run [OPTIONS] IMAGE [COMMAND] [ARG...]
+Run a command in a new container
+
+
+[root@143 ~]# docker inspect
+Usage:  docker inspect [OPTIONS] NAME|ID [NAME|ID...] [flags]
+Return low-level information on Docker objects
+
+暴露容器端口
+
+启动后台进程
+[root@143 webapp]# docker run --name hxapp -d 13660129620/webapp
+
+
+[root@143 webapp]# docker ps
+CONTAINER ID        IMAGE                COMMAND             CREATED              STATUS              PORTS                     NAMES
+fd454dd4ae8d        13660129620/webapp   "python app.py"     About a minute ago   Up About a minute   5000/tcp                  hxapp
+
+PORTS  5000/tcp  表示运行的容器暴露5000端口给docker宿主机
+
+
+覆盖配置端口，强制设置端口，生产环境中临时启动一个用于调试的容器
+[root@143 webapp]# docker run -d --expose=4000-4500  --name myapp 13660129620/webapp
+
+[root@143 webapp]# docker ps
+CONTAINER ID        IMAGE                COMMAND             CREATED              STATUS              PORTS                     NAMES
+1bcc35b9a644        13660129620/webapp   "python app.py"     About a minute ago   Up About a minute   4000-4500/tcp, 5000/tcp   myapp
+
+
+
+发布容器端口
+[root@143 webapp]# docker run --help
+Usage:	docker run [OPTIONS] IMAGE [COMMAND] [ARG...]
+
+
+大P，发布容器内所有暴露端口 到宿主机随机高位端口
+  -P, --publish-all                    Publish all exposed ports to random ports
+
+[root@143 webapp]# docker run -P -d --name exposed 13660129620/webapp
+
+[root@143 webapp]# docker ps
+CONTAINER ID        IMAGE                COMMAND             CREATED             STATUS              PORTS                     NAMES
+1b4c2cd3faf2        13660129620/webapp   "python app.py"     54 seconds ago      Up 52 seconds       0.0.0.0:32768->5000/tcp   exposed
+
+验证0.0.0.0:32768->5000/tcp 端口32768在宿主机配置的临时端口范围之内
+[root@143 webapp]# cat /proc/sys/net/ipv4/ip_local_port_range
+32768	60999
+
+确认docker宿主机是否已经监听了32768
+[root@143 webapp]# ss -lt 'sport = *:32768'
+State      Recv-Q     Send-Q         Local Address:Port             Peer Address:Port
+LISTEN     0          128            :::32768                       :::*
+
+验证32768映射到docker容器暴露端口是否成功
+[root@143 webapp]# curl localhost:32768
+Hello world!
+
+
+小p，将容器端口发布到宿主机。指定宿主机端口，而不是像大P那样随机分配临时端口。
+  -p, --publish list                   Publish a container's port(s) to the host
+
+例子：将映射暴露的5000端口到docker宿主机的回环网络接口的80端口
+[root@143 webapp]# docker run -d -p 127.0.0.1:80:5000 13660129620/webapp
+
+[root@143 webapp]# curl localhost
+Hello world!
+
+
+
+启动容器
+ docker run --name ourapp -d 13660129620/webapp
+
+ 报错： WARNING: IPv4 forwarding is disabled. Networking will not work.
+ 解决：
+vim  /usr/lib/sysctl.d/00-system.conf
+ net.ipv4.ip_forward=1
+
+ service network restart
+
+
+ 确认运行容器暴露了5000端口作为后台进程
+ [root@143 webapp]# docker ps
+CONTAINER ID        IMAGE                COMMAND             CREATED             STATUS              PORTS               NAMES
+09c4d54ef10e        13660129620/webapp   "python app.py"     4 minutes ago       Up 4 minutes        5000/tcp            ourapp
+
+
+--expose=[] 对已有的暴露端口进行覆盖，常用于临时启动一个用于调试的容器，不和生产环境冲突，例如：
+docker run -d --expose=4000-4500  --name app 13660129620/webapp
+
+
+
+[root@143 webapp]# docker ps
+CONTAINER ID        IMAGE                COMMAND             CREATED              STATUS              PORTS                     NAMES
+92a5f52712f3        13660129620/webapp   "python app.py"     About a minute ago   Up About a minute   4000-4500/tcp, 5000/tcp   app
+09c4d54ef10e        13660129620/webapp   "python app.py"     10 minutes ago       Up 10 minutes       5000/tcp                  ourapp
+
+
+
+链接容器
+1、确定13660129620/webapp容器运行时仅暴露指定端口。创建源容器source。
+[root@143 webapp]# docker run --name source -d 13660129620/webapp
+
+2、创建目标容器。 --link <source>:<alias>,创建一个链接，从source容器指向webapp目标容器。
+[root@143 webapp]# docker run -d --link source:webapp --name destination busybox /bin/ping webapp
+
+3、确认新创建的destination目标容器链接是否被建立。
+
+[root@143 webapp]# docker inspect --help
+Usage:	docker inspect [OPTIONS] NAME|ID [NAME|ID...]
+Return low-level information on Docker objects
+Options:
+  -f, --format string   Format the output using the given Go template 使用给定的GO模板格式化输出
+  -s, --size            Display total file sizes if the type is container 如果类型为容器，则显示总文件大小
+      --type string     Return JSON for specified type 返回指定类型的JSON
+
+[root@143 webapp]# docker inspect -f "{{ .HostConfig.Links }}" destination
+[/source:/destination/webapp]
+
+
+通过docker宿主机的iptables确认，docker宿主机和两个容器间是否建立了安全通道
+[root@143 webapp]# docker inspect -f "{{ .NetworkSettings.IPAddress }}" source
+172.17.0.8
+
+[root@143 webapp]# docker inspect -f "{{ .NetworkSettings.IPAddress }}" destination
+172.17.0.9
+
+[root@143 webapp]# iptables -L DOCKER
+Chain DOCKER (1 references)
+target     prot opt source               destination
+ACCEPT     tcp  --  anywhere             172.17.0.6           tcp dpt:commplex-main
+ACCEPT     tcp  --  anywhere             172.17.0.7           tcp dpt:commplex-main
+
+
+
+交互式容器
+
+1、建立一个可交互的容器会话，并链接到之前运行的source源容器
+[root@143 webapp]# docker run -i -t --link source:webapp --name interactive_container busybox /bin/sh
+/ #
+
+-i：可以使一个容器在在前台运行，并链接到标准输入流上
+-t：可以添加一个虚拟终端
+
+
+2、检查暴露给目标容器的环境变量
+/ # env | grep WEBAPP
+WEBAPP_NAME=/interactive_container/webapp
+WEBAPP_PORT_5000_TCP_ADDR=172.17.0.8
+WEBAPP_PORT_5000_TCP_PORT=5000
+WEBAPP_PORT_5000_TCP_PROTO=tcp
+WEBAPP_PORT_5000_TCP=tcp://172.17.0.8:5000
+WEBAPP_PORT=tcp://172.17.0.8:5000
+
+相互链接的容器会创建如下环境变量
+对每个容器均有：<alias>_NAME=/container_name/alias_name
+对每个已暴露端口的URL都有：<alias>_PORT_<port>_<protocol>.同时，它作为唯一前缀被添加到如下环境变量中。
+<prefix>_ADDR:元容器的ip地址
+<prefix>_PORT:已暴露的端口
+<prefix>_PROTO:已暴露端口采用的协议，tcp或者udp
+<alias>_PORT:源容器暴露的第一个端口
+
+
+webapp容器别名被映射到源容器的ip地址同时，源容器的名字也被映射到相同的ip地址。
+/ # cat /etc/hosts
+
+172.17.0.8	webapp 2080951b8b24 source
+172.17.0.10	3aa226e112c6
+
+
+第二章 优化docker镜像
+
+实验：创建一个大镜像
+
+1.创建大尺寸docker
+[root@143 project]# cat Dockerfile
+FROM debian:jessie
+RUN dd if=/dev/urandom of=/largefile bs=1024 count=254288
+
+2.编译镜像
+docker build -t 13660129620/largeapp .
+
+3.查看镜像
+[root@dockerhost project]# docker images
+REPOSITORY             TAG                 IMAGE ID            CREATED             SIZE
+13660129620/largeapp   latest              cba48cd5f5eb        24 hours ago        387MB
+
+4.推送镜像
+[root@dockerhost project]# time docker push 13660129620/largeapp
+
+
+创建私有docker registry库
+
+1、如何创建私有docker registry
+[root@dockerhost project]# docker run -p 5000:5000 -d registry:2
+
+2、对先前创建的镜像加标签，用于推送到本地registry。
+[root@dockerhost project]# docker tag 13660129620/largeapp dockerhost:5000/largeapp
+
+3.将加了标签的镜像推送到新建的docker registry。
+[root@dockerhost project]# time docker push dockerhost:5000/largeapp
+
+4.移除之前编译好的镜像，测试从本地docker registry拉取docker镜像。
+[root@dockerhost project]# docker rmi dockerhost:5000/largeapp 13660129620/largeapp
+
+ 
+
+
+一、禁用selinux
+由于Selinux和LXC有冲突，所以需要禁用selinux。编辑/etc/selinux/config，设置两个关键变量。    
+SELINUX=disabled 
+SELINUXTYPE=targeted
+
+二、配置Fedora EPEL源
+1 sudo yum install http://ftp.riken.jp/Linux/fedora/epel/6/x86_64/epel-release-6-8.noarch.rpm
+
+三、添加hop5.repo源
+
+cd /etc/yum.repos.d 
+sudo wget http://www.hop5.in/yum/el6/hop5.repo
+
+四、安装Docker
+sudo yum install docker-io
+
+图1是yum安装过程中的截图，可以发现安装的软件只有docker和lxc相关包，没有内核包，例如kernel-ml-aufs。
+
+在RedHat/CentOS下安装Docker（不升级内核）
+
+ 
+五、初步验证docker
+  输入docker -h，如果有如下输出，就证明docker在形式上已经安装成功。
+
+# docker -h
+
+
+
+
+
+
+使用Docker部署Gitlab
+1. 下载gitlab镜像
+docker pull gitlab/gitlab-ce
+
+报错因为docker没启动，没启动的原因是因为linux内核版本太低
+1：查看系统版本
+# uname -r
+2.6.32-431.el6.x86_64
+
+2：更新内核
+#　yum -y install kernel
+
+3：重启系统
+#  reboot
+
+4：查看是否启用新内核
+# uname -r
+2.6.32-504.8.1.el6.x86_64
+
+5：可以删除老内核节约空间
+# rpm -q kernel
+kernel-2.6.32-431.el6.x86_64
+kernel-2.6.32-504.8.1.el6.x86_64
+
+# rpm -e kernel-2.6.32-431.el6.x86_64
+
+
+
+2. 运行gitlab实例
+GITLAB_HOME=`pwd`/data/gitlab
+docker run -d \
+    --hostname gitlab \
+    --publish 8443:443 --publish 80:80 --publish 2222:22 \
+    --name gitlab \
+    --restart always \
+    --volume $GITLAB_HOME/config:/etc/gitlab \
+    --volume $GITLAB_HOME/logs:/var/log/gitlab \
+    --volume $GITLAB_HOME/data:/var/opt/gitlab \
+    gitlab/gitlab-ce
+3. 配置gitlab实例
+3.1 配置邮箱:
+
+docker exec -t -i gitlab vim /etc/gitlab/gitlab.rb
+下面以网易163邮箱为例配置邮箱:
+
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "smtp.163.com"
+gitlab_rails['smtp_port'] = 25
+gitlab_rails['smtp_user_name'] = "xxxx@163.com"
+gitlab_rails['smtp_password'] = "xxxxpassword"
+gitlab_rails['smtp_domain'] = "163.com"
+gitlab_rails['smtp_authentication'] = "login"
+gitlab_rails['smtp_enable_starttls_auto'] = false
+gitlab_rails['smtp_openssl_verify_mode'] = "peer"
+
+gitlab_rails['gitlab_email_from'] = "xxxx@163.com"
+user["git_user_email"] = "xxxx@163.com"
+注意以上的xxxx@163.com代表用户名，即邮箱地址，而xxxxpassword不是邮箱的登陆密码而是网易邮箱的客户端授权密码, 再网易邮箱web页面的设置-POP3/SMTP/IMAP-客户端授权密码查看。
+
+3.2 配置外部访问URL
+
+这个必须配置，否则默认以容器的主机名作为URL，刚开始由于做了端口映射80->8080, 因此设置为
+
+external_url "http://10.103.240.36:8080"
+后来发现external_url只能配置ip或者域名，不能有端口，否则不能启动。
+于是只能把端口设置为80->80，然后external_url设置为:
+
+external_url "http://10.103.240.36"
+4. 重启gitlab
+docker restart gitlab
+ 
