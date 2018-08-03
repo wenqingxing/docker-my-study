@@ -2,17 +2,21 @@
 
 https://docs.docker.com/install/linux/docker-ce/centos/
 
+==========安装开始==========
 
-sudo yum install -y yum-utils \
-  device-mapper-persistent-data \
-  lvm2
+sudo yum install -y yum-utils device-mapper-persistent-data lvm2
+sudo yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+sudo yum install docker-ce -y
+
+==========安装结束==========
+
+
+
 
 
  #sudo yum-config-manager     --add-repo     https://download.docker.com/linux/centos/docker-ce.repo
-
-sudo yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
-
-
+ 
+ 
 开启
 #sudo yum-config-manager --enable docker-ce-edge
 #sudo yum-config-manager --enable docker-ce-test
@@ -23,7 +27,6 @@ sudo yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/cen
 sudo rpm -i http://dl.fedoraproject.org/pub/epel/7/x86_64/Packages/e/epel-release-7-11.noarch.rpm
 
 
-sudo yum install docker-ce
 
 
 yum install -y git
