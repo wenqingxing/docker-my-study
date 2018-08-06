@@ -14,3 +14,9 @@ systemctl daemon-reload
 service docker restart
 
 http://192.168.224.142:5000/v2/_catalog
+
+镜像改名
+docker tag csphere/hello:1.0 192.168.224.142:5000/csphere/hello:1.0
+
+推送
+docker push 192.168.224.143:5000/csphere/hello:1.0
