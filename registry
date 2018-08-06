@@ -10,6 +10,7 @@ eof
 
 sed -i 'n;12aEnvironmentFile=-/etc/docker/daemon.json' /lib/systemd/system/docker.service
 
+systemctl daemon-reload
 service docker restart
 
 http://192.168.224.142:5000/v2/_catalog
