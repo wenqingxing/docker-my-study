@@ -1,0 +1,92 @@
+
+yum -y install wget lrzsz
+
+下载
+wget https://storage.googleapis.com/harbor-releases/harbor-offline-installer-v1.5.2.tgz
+或者到本地使用rz上传上来，软件名称是harbor-offline-installer-v1.5.2.tgz
+
+
+其他版本下载如下
+https://github.com/vmware/harbor/releases
+
+cat <<EOF > /etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=http://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64
+enabled=1
+gpgcheck=0
+repo_gpgcheck=0
+gpgkey=http://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg
+       http://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
+EOF
+
+yum -y install docker-compose
+
+tar xvf harbor-offline-installer-v1.5.2.tgz
+cd harbor
+
+vim harbor.cfg
+hostname = 192.168.224.142
+
+./install.sh
+
+登陆
+admin/Harbor12345
+
+项目-新建项目-填写项目名（如：test，默认是私有）
+
+用户管理-创建用户（如：hx6007）
+
+项目-项目名称（如：test）
+
+项目-成员-新建成员（如：lisi）
+
+
+cat >> /etc/docker/daemon.json << eof
+{
+  "registry-mirrors": ["https://registry.docker-cn.com"],
+  "insecure-registries": ["192.168.224.142"]
+}
+eof
+
+sed -i 'n;12aEnvironmentFile=-/etc/docker/daemon.json' /lib/systemd/system/docker.service
+
+
+systemctl daemon-reload
+service docker restart
+
+docker pull busybox
+docker tag busybox 192.168.224.142/test/busybox
+
+docker login 192.168.224.142 -u admin
+Password:Harbor12345
+Login Succeeded
+
+docker push 192.168.224.142/test/busybox
+
+
+相关视频教程：
+
+内容信任
+https://v.qq.com/x/page/n0553fzzrnf.html
+
+基于角色的访问控制
+https://v.qq.com/x/page/l0553yw19ek.html
+
+漏洞扫描
+https://v.qq.com/x/page/s0553k9692d.html
+
+图像复制
+https://v.qq.com/x/page/a0553wc7fs9.html
+
+VMworld 2017（youtube）
+https://www.youtube.com/watch?v=tI5xMe24fJ4
+
+
+
+
+
+
+
+
+
