@@ -44,6 +44,9 @@ vim harbor.cfg
 hostname = 192.168.224.142
 
 ./install.sh
+如果报错，则重启docker
+service docker restart
+
 
 登陆
 admin/Harbor12345
