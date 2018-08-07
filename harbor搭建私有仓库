@@ -9,6 +9,21 @@ wget https://storage.googleapis.com/harbor-releases/harbor-offline-installer-v1.
 其他版本下载如下
 https://github.com/vmware/harbor/releases
 
+
+sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
+setenforce 0
+service iptables save
+systemctl stop firewalld
+systemctl mask firewalld
+yum install iptables-services -y
+systemctl enable iptables
+systemctl start iptables
+iptables -F
+/usr/libexec/iptables/iptables.init save
+
+
+
+
 cat <<EOF > /etc/yum.repos.d/kubernetes.repo
 [kubernetes]
 name=Kubernetes
