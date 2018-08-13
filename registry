@@ -1,5 +1,14 @@
  docker run -d -p 5000:5000 --restart always --name registry registry:2
  
+ 也可以用这个源
+  tee /etc/docker/daemon.json <<-'EOF'
+{
+  "registry-mirrors": ["https://g2gnglof.mirror.aliyuncs.com"]
+}
+EOF
+
+
+ 
  cat >> /etc/docker/daemon.json << eof
 {
   "registry-mirrors": ["https://registry.docker-cn.com"],
