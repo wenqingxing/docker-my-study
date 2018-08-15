@@ -1,0 +1,17 @@
+启动redis容器
+docker run -d --name redis jamtur01/redis
+
+链接redis
+docker run -p 4567 --name webapp --link redis:db -it -v $PWD/webapp_redis:/opt/webapp jamtur01/sinatra /bin/bash
+docker run -p 4567 --name webapp2 --link redis:db ..
+docker run -p 4567 --name webapp3 --link redis:db ..
+
+***redis:db  redis：要链接的容器名字  db：链接的别名 ,可多次指定--link标志来链接多个容器。
+
+在容器内添加/etc/hosts记录
+docker run -p --add-host=docker:10.0.0.1 --name webapp2 --link redis:db ...
+
+进入容器，通过env查看变量
+
+
+
