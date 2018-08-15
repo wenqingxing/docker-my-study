@@ -1,0 +1,23 @@
+创建网络
+docker network create app
+
+查看当前网络
+docker network inspect app
+
+查看所有网络
+docker network ls
+
+已有容器加入app网络
+docker network connect app db2
+
+从网络中断开一个容器
+docker network disconnect db2
+
+  
+docker run -d --net=app --name redisdb redis
+ 
+docker run -d -p 3306:3306 --net=app  --name mysqldb -e MYSQL_ROOT_PASSWORD=rootroot  -v /mydata:/var/lib/mysql  mysql
+
+docker run -d -p 8080:8081 --net=app --name yu huayu2
+
+
