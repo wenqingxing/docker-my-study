@@ -1,0 +1,19 @@
+
+Dockerfile定义卷
+jekyll：
+VOLUME [ "/data", "/var/www/html" ]
+apache：
+VOLUME [ "/var/www/html" ]
+
+docker run -v $PWD:/data/ --name james_blog jamtur01/jekyll
+没有-d，表示没有在后台运行
+docker run -d -P --volumes-from james_blog jamtur01/apache
+
+从定义卷的容器中共享卷
+docker run -d -P --volumes-from james_blog jamtur01/apache
+--volumes-from：把指定容器里的所有卷都加入新创建的容器里
+前提是容器必须存在
+**即使删除了使用卷的最后一个容器，卷中的数据也会持久保存。
+
+
+
