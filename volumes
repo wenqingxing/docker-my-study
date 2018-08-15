@@ -35,7 +35,8 @@ WORKDIR /data
 
 ENTRYPOINT [ "jekyll", "build", "--destination=/var/www/html", "--watch" ]
 
-
+运行容器
+docker run -v $PWD:/data/ --name james_blog jamtur01/jekyll
 ============================================================================
  
 apache Dockerfile
@@ -62,6 +63,8 @@ EXPOSE 80
 
 ENTRYPOINT [ "/usr/sbin/apache2" ]
 
+运行容器
+docker run -d -P --volumes-from james_blog jamtur01/apache
 ============================================================================
 
 
