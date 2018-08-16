@@ -18,6 +18,9 @@ docker run -d -P --volumes-from james_blog jamtur01/apache
 更新代码后，需要重启容器。
 docker  restart james_blog
 
+备份卷
+docker run --rm --volumes-from james_blog -v $(pwd):/backup ubuntu tar cvf /backup/james_blog_bakup.tar /var/www/html
+
 ***apache容器是不需要更新的
 ============================================================================
 jekyll Dockerfile
