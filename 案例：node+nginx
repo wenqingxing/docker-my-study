@@ -21,3 +21,8 @@ RUN cnpm run build
 FROM nginx:stable
 COPY --from=builder /app/.nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=builder /app/build /usr/share/nginx/html
+
+
+构建：
+docker image build  -t $REGISTRY/$IMAGE:production --build-arg SITE_CODE=$IMAGE --build-arg GATEWAY=$WANGGUAN  .
+docker push $REGISTRY/$IMAGE:production
