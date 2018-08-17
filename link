@@ -32,7 +32,13 @@ REDIS_HOST=redis
 所以ping redis ,可以ping得通
 
 
+实例：
 
+启动mysql容器
+docker run -d  --name mysql -v mysql-data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=wordpress mysql
+
+启动workpress容器
+docker run -d -e WORDPRESS_DB_HOST=mysql:3306 --link mysql -p 8080:80 wordpress
 
 
 
