@@ -3,9 +3,6 @@
 curl -L https://github.com/docker/compose/releases/download/1.22.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
 
-三大概念
-services：一个service代表一个container，这个container可以从dockerhub的image来创建，也可以从本地的Dockerfile build出来的images来创建。启动类似
-docker run,我们可以给其指定network和wolume，所以可以给service指定network和volume的引用。
 
 查看版本
 docker-compose --version
@@ -27,6 +24,12 @@ RUN pip install -r requirements.txt
 
 构建：
 docker build -t jamtur01/composeapp .
+
+=====================================================
+
+三大概念
+services：一个service代表一个container，这个container可以从dockerhub的image来创建，也可以从本地的Dockerfile build出来的images来创建。启动类似
+docker run,我们可以给其指定network和wolume，所以可以给service指定network和volume的引用。
 
 =====================================================
 
