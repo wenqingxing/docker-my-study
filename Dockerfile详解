@@ -77,9 +77,16 @@ FROM <image>[:<tag>] [AS <name>]
 
 FROM <image>[@<digest>] [AS <name>]
 
+例子：
+FROM node:9.11.1 as builder
+
+
 
 可以通过添加AS name到FROM指令来将 名称赋予新的构建阶段。该名称可用于后续FROM和 COPY --from=<name|index>指令，以引用此阶段构建的图像。
-
+例子：
+FROM nginx:stable
+COPY --from=builder /app/.nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=builder /app/build /usr/share/nginx/html
 
 
 了解ARG和FROM如何互动
@@ -97,6 +104,17 @@ ARG VERSION=latest
 FROM busybox:$VERSION
 ARG VERSION
 RUN echo $VERSION > image_version
+
+例子：
+# node底包
+FROM node:9.11.1 as builder
+#定义环境变量 平台代号
+ARG SITE_CODE
+ARG GATEWAY
+
+然后在build命令中传入参数
+构建：
+docker image build  -t $REGISTRY/$IMAGE:production --build-arg SITE_CODE=$IMAGE --build-arg GATEWAY=$WANGGUAN  .
 
 
 
@@ -130,6 +148,31 @@ docker。
 RUN在下一次构建期间，指令的缓存不会自动失效。类似指令的缓存 RUN apt-get dist-upgrade -y将在下一次构建期间重用。例如，RUN可以通过使用--no-cache 标志使指令的高速缓存无效
 
 docker build --no-cache。
+
+Run : 执行命令并创建新的image layer
+Cmd：设置容器启动后默认执行的命令和参数
+Entrypoint：设置容器启东市运行的命令
+Shell 格式
+Run apt-get install -y vim
+Cmd echo “hello docker”
+
+Exec格式
+RUN [ “apt-get”, “install”, ”-y” , “vim” ]
+CMD [ “/bin/echo” , ”echo docker” ]
+ENTRPOINT [ “/bin/echo” , “hello docker” ]
+
+
+Shell 和exec格式
+Dockerfile1
+FROM centos
+ENV name Docker
+ENTRYPOINT echo “hello $name”
+
+Dockerfile2
+FROM centos
+ENV name Docker
+ENTRYPOINT [ “/bin/bash” ,”-c”, “echo hello $name”]
+
 
 
 
