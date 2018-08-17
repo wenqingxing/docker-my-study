@@ -23,5 +23,5 @@ docker push 192.168.224.143:5000/csphere/hello:1.0
 
 
 echo "=====查看镜像推送状态====="
-curl -X GET 122.112.215.179:5000/v2/_catalog
-curl -X GET 122.112.215.179:5000/v2/$IMAGE_NAME/tags/list
+curl -X GET 192.168.224.143:5000/v2/_catalog
+curl -X GET 192.168.224.143:5000/v2/$IMAGE_NAME/tags/list
