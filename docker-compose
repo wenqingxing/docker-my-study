@@ -184,6 +184,106 @@ docker-compose up --scale web=3 -d
 docker-compose up -d 先启动一个容器，再执行
 docker-compose up --scale web=3 -d
 
+扩展后如何做到负载均衡？
+https://github.com/hx6007/docker-k8s-devops-master/tree/master/chapter6/labs/lb-scale
+=====================================================
+
+Dockerfile
+
+FROM python:2.7
+LABEL maintaner="Peng Xiao xiaoquwl@gmail.com"
+COPY . /app
+WORKDIR /app
+RUN pip install flask redis
+EXPOSE 80
+CMD [ "python", "app.py" ]
+
+=====================================================
+app.py
+
+from flask import Flask
+from redis import Redis
+import os
+import socket
+
+app = Flask(__name__)
+redis = Redis(host=os.environ.get('REDIS_HOST', '127.0.0.1'), port=6379)
+
+
+@app.route('/')
+def hello():
+    redis.incr('hits')
+    return 'Hello Container World! I have been seen %s times and my hostname is %s.\n' % (redis.get('hits'),socket.gethostname())
+
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=80, debug=True)  ###原来是5000，现在改为80
+=====================================================
+ 
+docker-compose.yml
+
+version: "3"
+
+services:
+
+  redis:
+    image: redis
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      REDIS_HOST: redis
+
+####在原来的基础上增加此段，原来有暴露端口，现在删除掉
+  lb:
+    image: dockercloud/haproxy
+    links:
+      - web
+    ports:
+      - 8080:80
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock 
+
+=====================================================
+Down掉所有
+dockdr-compose down
+dockdr-compose up -d
+docker-compose ps 
+
+curl 127.0.0.1:8080
+
+docker-compose up --scale web=3 -d
+
+curl 127.0.0.1:8080 每次访问都会不一样
+
+轮询访问
+继续增加
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
