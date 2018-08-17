@@ -49,6 +49,8 @@ redis:
 效果如下：
 docker run -d -p 5000:5000 -v .:/composeapp --link redis:redis --name web jamtur01/composeapp python app.py
 
+=====================================================
+
 实例2：
 services:
   db: 
@@ -72,7 +74,9 @@ networks:
     driver: bridge
   backer-tier:
     driver: bridge
-    
+
+=====================================================
+
 完整案例：
 docker-compose.yml
 
@@ -107,11 +111,44 @@ volumes:
 networks:
   my-bridge:
     driver: bridge
-
-
-
     
+    
+=====================================================
+  
+    
+    
+    
+第二个案例
+https://github.com/hx6007/docker-k8s-devops-master/tree/master/chapter6/labs/flask-redis
+
+
+
+docker-compose.yml
+
+version: "3"
+
+services:
+
+  redis:
+    image: redis
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8080:5000
+    environment:
+      REDIS_HOST: redis    
+
+=====================================================
+
+
+启动    
 docker-compose up -d
+
+指定文件启动
+docker-compose -f  docker-compose.yml up 
 
 =====================================================
 
@@ -124,7 +161,31 @@ docker-compose logs
 停止
 docker-compose stop
 
+停止但是不会删除镜像
+docker-compose down
+
+开启
+docker-compose start
+
 删除
 docker-compose rm
 
+后台运行,如果要看日志，就不加-d
+docker-compose up -d
+
+进入容器
+docker-compose exec mysql bash
+
 =====================================================
+6-4 水平扩展和负载均衡
+docker-compose up --scale web=3 -d
+
+** 因端口冲突会报错，要解决端口问题，把docker-compose的端口删除掉
+docker-compose up -d 先启动一个容器，再执行
+docker-compose up --scale web=3 -d
+
+
+
+
+
+
