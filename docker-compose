@@ -51,7 +51,8 @@ docker run -d -p 5000:5000 -v .:/composeapp --link redis:redis --name web jamtur
 
 实例2：
 services:
-  db: postgres:9.4
+  db: 
+    image：postgres:9.4
   volumes:
     - "db-data:/var/lib/postgresql/data"
   networks:
@@ -60,6 +61,56 @@ services:
 等同于
 docker run -d --network back-tier db-data:/var/lib/postgresql/data postgres:9.4
 
+"db-data:/var/lib/postgresql/data"  =========>> docker volume create db-data
+
+  networks:
+    - back-tier =========>> 
+    
+同例
+networks:
+  front-tier:
+    driver: bridge
+  backer-tier:
+    driver: bridge
+    
+完整案例：
+docker-compose.yml
+
+
+version: '3'
+
+services:
+
+  wordpress:
+    image: wordpress
+    ports:
+      - 8080:80
+    environment:
+      WORDPRESS_DB_HOST: mysql
+      WORDPRESS_DB_PASSWORD: root
+    networks:
+      - my-bridge
+
+  mysql:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: wordpress
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - my-bridge
+
+volumes:
+  mysql-data:
+
+networks:
+  my-bridge:
+    driver: bridge
+
+
+
+    
 docker-compose up -d
 
 =====================================================
