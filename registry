@@ -25,3 +25,10 @@ docker push 192.168.224.143:5000/csphere/hello:1.0
 echo "=====查看镜像推送状态====="
 curl -X GET 192.168.224.143:5000/v2/_catalog
 curl -X GET 192.168.224.143:5000/v2/$IMAGE_NAME/tags/list
+
+
+
+
+启用HTTPSDocker对所有请求启用TLS验证，启用HTTPS需要对Docker启动文件进行配置，可使用命令：
+
+dockerd --tlsverify --tlscacert=ca.pem --tlscert=server-cert.pem --tlskey=server-key.pem \ -H=10.47.40.110:2376
