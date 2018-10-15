@@ -118,6 +118,125 @@ docker container diff CONTAINER
 
 
 
+　构建镜像创建完Dockerfile文件后，在Dockerfile目录中执行以下命令来构建镜像
+docker build  -t  <镜像名称>:<tag>
+
+　从镜像仓库下载镜像
+docker image pull [OPTIONS] NAME[:TAG|@DIGEST]
+
+
+　将本地镜像上传到镜像仓库
+docker image push [OPTIONS] NAME[:TAG]
+
+
+
+·显示本地镜像列表
+docker image ls [OPTIONS] [REPOSITORY[:TAG]]
+
+
+显示记录在元数据中的历史命令
+docker image history [OPTIONS] IMAGE
+
+
+
+·将镜像保存到tar文件中
+docker image save [-o, --output=""] IMAGE [IMAGE...]
+，生成的tar文件中既包含元数据也包含层数据。
+
+导入tar文件中镜像
+docker image load [-i, --input=""][-q, --quiet[=false]]
+默认从标准输入读取，-q选项不产生反馈信息，导入镜像不会丢失原始信息。
+
+·将容器固化为镜像
+docker commit [OPTIONS] CONTAINER [REPOSITORY[:TAG]]
+
+
+
+将容器根文件系统导出为tar文件
+docker export [-o, --output=""] CONTAINER
+注意，使用这种方式导出的tar文件中没有元数据，也没有镜像分层信息。
+
+
+·导入容器根文件系统tar文件
+docker image import [OPTIONS] file|URL|- [REPOSITORY[:TAG]]
+
+
+构建镜像
+docker image build [OPTIONS] PATH | URL | -
+
+PATH、URL确定构建上下文。如指定PATH，将路径下（也包括当前路径）文件和目录打包（.dockerignore含不想上传内容）上传到Docker引擎；
+
+如指定git URL，则引擎克隆该项目指定分支，作为上下文使用；还可使用远端tar文件以及‘-’表示的标准输入作为上下文。
+
+-f/--file指定Dockerfile的路径，默认为当前路径下Dockerfile文件。
+
+-t/--tag指定构建成功后镜像标识，使用多个该选项来指定多个镜像标识。
+
+Dockerfile中可以定义ARG参数，这些参数用--build-arg选项在构建时动态指定，预定义参数也是如此：
+--build-arg=http_proxy=“http://one.proxy”
+
+使用--iidfile将镜像ID写入指定文件。
+
+Dockerfile中有多段时，
+
+--target指定从哪段开始构建。
+
+--label指定生成镜像的标签。
+
+--pull会拉取基础镜像新版本，不使用本地的。
+
+-q/--quiet控制输出信息。
+
+--add-host可定义主机名到IP映射。
+
+--network=bridge|host|none|container：<name|id>指定运行run命令的网络模式。
+
+--security-opt=[]可参见前面docker container run选项的说明，值为key=value形式。
+
+--rm要求成功后删除中间层，
+
+--force-rm则总是删除。
+
+--no-cache说明构建时不使用缓存；而--cache-from=[]中包含的镜像用于搜索缓存镜像层。
+
+--squash是实验性功能，将当前build过程只作为一层添加到父镜像上。
+
+还有一些选项用于限制构建容器的资源占用，比如：
+
+--cgroup-parent；
+
+-m/--memory；
+
+--memory-swap；
+
+--shm-size；
+
+--cpu-shares；
+
+--cpu-period，
+
+--cpu-quota，
+
+--cpuset-cpus，
+
+--cpuset-mems；
+
+--ulimit=[]等。
+
+另外，--isolation选项指定使用的容器隔离技术，
+
+只在Windows下有意义。
+
+
+
+
+
+
+
+
+
+
+
 
 
 
