@@ -16,6 +16,114 @@ service docker status
 
 
 
+
+
+1.列出所有容器基本信息
+docker container ps [OPTIONS]
+
+该命令列出本机运行状态容器的ID、对应镜像标识、Name、启动命令、创建时间和当前状态等信息。
+ls和list为此命令别名。
+-q/--quiet只显示容器ID。
+-s/--size增加显示一列容器大小。
+-a/--all可显示非运行态容器信息。
+--no-trunc不截断各个信息列。
+-n/--last显示最后创建的n个容器的基本信息。
+-l/--latest显示最后创建的容器的基本信息。
+--format（-f选项不是它的缩写形式）用于控制
+
+2.查看容器详细信息
+docker container inspect [OPTIONS] CONTAINER [CONTAINER...]
+
+
+3.查看容器日志
+docker container logs [OPTIONS] CONTAINER
+
+--follow/-f，连续显示日志；--tail，指定从日志尾算起显示多少行，参数为all表示全部；-t/--timestamps，在每行日志之前加上时间戳。
+
+
+
+ 4.列出容器端口映射
+
+docker container port CONTAINER [PRIVATE_PORT[/PROTO]]
+
+该命令显示指定容器的全部端口映射或者部分端口映射信息。
+
+
+5.显示容器中运行进程
+docker container top CONTAINER [ps OPTIONS]
+
+该命令显示容器中进程信息，包括：UID、PID、PPID、CPU使用率、启动时间、tty、运行时间和启动命令等列，PID和PPID是宿主机进程命名空间中的ID值。Linux下等于执行ps命令，并且默认带有-ef选项，因此要求容器中有ps命令。
+
+6.显示容器资源占用统计
+docker container stats [OPTIONS] [CONTAINER...]
+
+该命令以表格形式连续显示容器的运行统计：CPU和内存占用百分比、内存使用量和允许使用量、容器网络流量、容器块设备读写量和容器创建的进程数。
+带--no-stream时只显示一次退出。
+--format控制显示格式，带table前缀显示表头，列占位符有Container、name、ID、CPUPerc、MemUsage、NetIO、BlockIO、MemPerc和PIDs。
+-a/--all可显示非运行态容器统计；
+--no-trunc，所有字段显示时不截断。
+
+
+
+2.在运行状态容器中执行命令  
+docker container exec [OPTIONS] CONTAINER COMMAND [ARG...]
+
+命令须在容器中可访问且只能为可执行程序或者shell，不能是shell命令串。
+-d/--detach以后台方式执行，结果不回显；
+-i/--interactive以交互式执行命令，回显结果。
+-e/--env为命令设置环境变量。
+-t/--tty会分配伪终端。
+--privileged以特权方式执行命令。
+-u/--user以指定用户名或者UID执行命令，参数格式为<name|uid>[：<group|gid>]。
+-w/--workdir指定工作目录。
+
+3.nsenter命令
+只要进入Docker容器的命名空间中就可查看容器状态，在util-Linux软件包2.23以上版本中包含的nsenter工具就可以实现此功能。
+命令格式为：
+nsenter [options] <program> [<argument>...]
+
+若不进入mount命名空间，则待执行命令不必在容器文件视图中。
+有-t/--target<pid>选项时，其他命名空间选项不必带有路径。
+-m/--mount；-u/--uts；-i/--ipc；-n/--net；-p/--pid；-U/--user选项指定要进入的命名空间。
+-Z/--follow-context使用目标进程SELinux上下文。
+-F/--no-fork在执行命令之前不执行fork。
+-w/--wd和-r/--root指定工作目录和根目录。
+-S/--setuid和-G/--setgid分别为命令执行设定UID和GID。
+
+获取容器进程ID可用如下命令：
+docker container inspect -f="{{.State.Pid}}" <container>
+
+2.5　访问容器内容使用下面的命令可以从宿主机上操作容器文件视图中的内容。
+
+1.复制容器内容
+使用如下命令可在本地文件系统和容器文件视图之间复制文件或者目录内容。
+
+拷出命令：docker cp [OPTIONS] CONTAINER:SRC_PATH DEST_PATH|-
+
+拷入命令：docker cp [OPTIONS] SRC_PATH|- CONTAINER:DEST_PATH
+
+“-”表示标准输入输出，目标路径的父目录需存在，以覆盖方式执行但不会用目录覆盖同名文件。
+不能复制/proc、/sys、/dev以及tmpfs下的文件。
+
+--archive/-a保存全部UID/GID。
+--follow-link/-L追溯源路径符号链接。
+
+2.查看容器运行后更新内容
+docker container diff CONTAINER
+
+该命令显示容器读写层内容，输出内容中行首字母表示更新类型：A（新增）、D（删除）、C（更改）。
+
+
+
+
+
+
+
+
+
+
+
+
  #sudo yum-config-manager     --add-repo     https://download.docker.com/linux/centos/docker-ce.repo
  
  
