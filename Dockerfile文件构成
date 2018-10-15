@@ -1,0 +1,26 @@
+Dockerfile是一个文本文件，内容中包含了一条或多条指令，每条指令构建镜像文件的一层。Dockerfile文件一般以“#”注释行开头，包括基础镜像信息、维护者信息、镜像操作指令、启动时执行指令等。
+
+FROM image.tag  定义使用哪个基础镜像启动构建流程  FROM centos
+
+MAINTERINER 声明镜像者 MAINTERINER fg
+
+ENV key value 设置环境变量 ENV host 192.168.1.1
+
+RUN 命令  执行命令  RUN apt-get install MYSQL
+
+ADD src/file dest/file 复制主机文件到容器内，如果有压缩文件则自动解压
+
+COPY src/file dest/file 复制宿主机文件到容器内，如果有压缩文件则不解压
+
+WORKDIR 目录   设置工作目录
+
+EXPOSE 端口1  端口2 设定端口，容器内应用可以使用端口同外部交互
+
+CMD 参数 构建容器时使用，会被docker run 后面的参数覆盖
+
+ENTRYPOINT 参数 同CMD相似，但参数不会被覆盖
+
+VOLUME 将本地文件夹或其他文件夹挂载到容器中
+
+
+
