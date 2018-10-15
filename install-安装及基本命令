@@ -201,31 +201,53 @@ Dockerfile中有多段时，
 
 --squash是实验性功能，将当前build过程只作为一层添加到父镜像上。
 
-还有一些选项用于限制构建容器的资源占用，比如：
 
---cgroup-parent；
 
--m/--memory；
+　修改本地镜像标识
+docker image tag SOURCE_IMAGE[:TAG] TARGET_IMAGE[:TAG]
 
---memory-swap；
+原镜像标识并不删除，相当于为原镜像标识生成了别名。
 
---shm-size；
+　删除本地镜像·删除本地镜像
+docker image rm [OPTIONS] IMAGE [IMAGE...]-f/--force，强删被引用镜像，但不删运行容器引用的。
 
---cpu-shares；
+--no-prune删除“虚悬”镜像。引用一个镜像层的最后镜像被删除后，才会实际删除该镜像层。
 
---cpu-period，
+·删除虚悬镜像
 
---cpu-quota，
+docker image prune [OPTIONS]
 
---cpuset-cpus，
+-f选项无确认信息。
 
---cpuset-mems；
+-a/--all删除所有未使用镜像。
 
---ulimit=[]等。
+--filter选择被删除集合。
 
-另外，--isolation选项指定使用的容器隔离技术，
 
-只在Windows下有意义。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
