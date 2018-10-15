@@ -38,7 +38,9 @@ docker container inspect [OPTIONS] CONTAINER [CONTAINER...]
 3.查看容器日志
 docker container logs [OPTIONS] CONTAINER
 
---follow/-f，连续显示日志；--tail，指定从日志尾算起显示多少行，参数为all表示全部；-t/--timestamps，在每行日志之前加上时间戳。
+--follow/-f，连续显示日志；
+--tail，指定从日志尾算起显示多少行，参数为all表示全部；
+-t/--timestamps，在每行日志之前加上时间戳。
 
 
 
@@ -52,7 +54,8 @@ docker container port CONTAINER [PRIVATE_PORT[/PROTO]]
 5.显示容器中运行进程
 docker container top CONTAINER [ps OPTIONS]
 
-该命令显示容器中进程信息，包括：UID、PID、PPID、CPU使用率、启动时间、tty、运行时间和启动命令等列，PID和PPID是宿主机进程命名空间中的ID值。Linux下等于执行ps命令，并且默认带有-ef选项，因此要求容器中有ps命令。
+该命令显示容器中进程信息，包括：UID、PID、PPID、CPU使用率、启动时间、tty、运行时间和启动命令等列，PID和PPID是宿主机进程命名空间中的ID值。
+Linux下等于执行ps命令，并且默认带有-ef选项，因此要求容器中有ps命令。
 
 6.显示容器资源占用统计
 docker container stats [OPTIONS] [CONTAINER...]
