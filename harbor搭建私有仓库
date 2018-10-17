@@ -104,83 +104,210 @@ https://www.youtube.com/watch?v=tI5xMe24fJ4
 
 ==========================================================================
 
-                               安装方法二
+                               安装方法二（带证书）
 
 ==========================================================================
 
-·下载Harbor：
-git clone https://github.com/vmware/harbor
+参考文章：
+https://github.com/goharbor/harbor/blob/master/docs/installation_guide.md
 
-·解压：
-tar xvfharbor-offline-installer-<version>.tgz
+----------doeker 安装.启动开始----------
 
-·配置harbor.cfg文件。
+sudo yum install -y yum-utils device-mapper-persistent-data lvm2
+sudo yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+sudo yum install docker-ce -y
+systemctl enable  docker 
+systemctl daemon-reload
+sudo service docker start
+service docker status
+ 
 
-·Harbor部署的所有文件均在Deploy目录下：
 
-#cd ./Harbor/Deployment 
 
-#ls 
-config db docker-compose.yml    #Docker Compose模板
+----------在Linux系统上安装Compose----------
 
-harbor.cfg     #Harbor配置文件 ......
 
-·执行install.sh脚本安装并启动Harbor：
+
+cat <<EOF > /etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=http://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64
+enabled=1
+gpgcheck=0
+repo_gpgcheck=0
+gpgkey=http://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg
+       http://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
+EOF
+
+yum -y install docker-compose
+
+
+
+----------版本列表----------
+
+https://github.com/goharbor/harbor/releases
+
+
+----------下载二进制文件----------
+
+cd  /usr/local/src
+
+wget https://storage.googleapis.com/harbor-releases/harbor-offline-installer-v1.6.1.tgz
+
+
+tar xvf  harbor-offline-installer-v1.6.1.tgz
+ 
+
+cd harbor
+
+
+
+
+----------修改harbor配置----------
+
+
+sed -i 's/hostname = reg.mydomain.com/hostname = reg.xingmeng.tb/g' harbor.cfg
+
+sed -i 's@ui_url_protocol = http@ui_url_protocol = https@g' harbor.cfg
+
+sed -i 's@ssl_cert = /data/cert/server.crt@ssl_cert = /data/cert/reg.xingmeng.tb.crt@' harbor.cfg
+
+sed -i 's@ssl_cert_key = /data/cert/server.key@ssl_cert_key = /data/cert/reg.xingmeng.tb.key@' harbor.cfg
+
+sed -i 's@project_creation_restriction = everyone@project_creation_restriction = adminonly@' harbor.cfg
+
+
+
+----------写入主机名----------
+
+ hostname reg.xingmeng.tb
+ echo reg.xingmeng.tb > /etc/hostname
+
+
+
+----------创建自签证书----------
+
+警告：
+
+Common Name (eg, your name or your server's hostname) []:reg.xingmeng.tb
+
+在下面的执行中到了上面那一步务必填写reg.xingmeng.tb，否则服务器无法登陆harbor
+
+
+
+mkdir -p /data/cert && cd /data/cert
+
+openssl req     -newkey rsa:4096 -nodes -sha256 -keyout ca.key     -x509 -days 365 -out ca.crt
+
+openssl req     -newkey rsa:4096 -nodes -sha256 -keyout reg.xingmeng.tb.key     -out reg.xingmeng.tb.csr
+
+
+openssl x509 -req -days 365 -in reg.xingmeng.tb.csr -CA ca.crt -CAkey ca.key -CAcreateserial -out reg.xingmeng.tb.crt
+
+
+ mkdir -pv /etc/docker/certs.d/reg.xingmeng.tb
+
+cp ca.crt /etc/docker/certs.d/reg.xingmeng.tb
+
+
+
+cat << EOF >> /etc/hosts
+192.168.224.190 reg.xingmeng.tb
+EOF
+
+
+
+同时在C:\Windows\System32\drivers\etc\HOSTS 中做好dns记录
+
+192.168.224.190 reg.xingmeng.tb
+
+
+
+
+
+
+
+----------为Harbor生成配置文件----------
+
+  ./prepare
+
+----------安装----------
 
 ./install.sh
 
 
-·配置HTTPS访问
 
-默认情况下Harbor使用HTTP进行访问，官方提供了自签名证书的方法，不过生产环境还是建议购买SSL证书。
+----------停止与启动命令----------
 
-配置证书：
+####需要进入到目录执行，例如/usr/local/src/harbor
 
-# cp nginx.https.conf nginx.conf 
+cd /usr/local/src/harbor
 
-#ssl 
+如果Harbor已在运行，请停止并删除现有实例。您的图像数据保留在文件系统中
+ 
+  docker-compose down  
 
-# cd config/nginx/
+最后，重启harbor：
 
-将两个证书文件放置到cert目录下：xxx.xxx.com.crt(证书公钥) xxx.xxx.com.key(证书私钥)
-
-·Harbor配置Harbor的配置项比较少，都在harbor.cfg里面。
-
-# vim harbor.cfg 
-hostname = myharbor 
-ui_url_protocol = https
-harbor_admin_password =123456
-
-构建并启动Harbor：
-# ./prepare 
-Generated configuration file: ./config/ui/env 
-Generated configuration file: ./config/ui/app.conf 
-Generated configuration file:./config/registry/config.yml 
-Generated configuration file: ./config/db/env 
-Generated configuration file:./config/jobservice/env 
-Clearing the configuration file:./config/ui/private_key.pem 
-Clearing the configuration file:./config/registry/root.crt 
-Generated configuration file:./config/ui/private_key.pem 
-Generated configuration file:./config/registry/root.crt 
-The configuration files are ready, please usedocker-compose to start the service.
-
-使用DockerCompose启动服务：
-
-# docker-compose up -d
-
-现在就可以访问https://xxx.xxx.com，使用默认的账号打开Harbor的管理界面。
+  docker-compose up -d
 
 
 
 
-==========================================================================
 
-                               安装方法三（官方文档）
+访问(谷歌浏览器估计无法访问，换火狐浏览器访问)
 
-==========================================================================
+https://reg.xingmeng.tb
 
-https://github.com/goharbor/harbor/blob/master/docs/installation_guide.md
+USERNAME: admin
 
+PASSWORD: Harbor12345
+
+
+
+
+主机登陆
+
+docker login reg.xingmeng.tb
+
+USERNAME: admin
+
+PASSWORD: Harbor12345
+
+登陆不了的话注意清空iptables，然后重启docker
+iptables -F
+systemctl daemon-reload && systemctl restart docker && systemctl status docker
+
+
+
+
+----------测试----------
+
+登陆https://reg.xingmeng.tb
+
+admin/Harbor12345
+
+项目-新建项目-填写项目名（如：test，默认是私有）
+
+用户管理-创建用户（如：hx6007）
+
+项目-项目名称（如：test）
+
+项目-成员-新建成员（如：lisi）
+
+
+docker pull busybox
+docker tag busybox reg.xingmeng.tb/test/busybox
+
+docker login reg.xingmeng.tb -u admin
+Password:Harbor12345
+Login Succeeded
+
+docker push reg.xingmeng.tb/test/busybox
+
+删除镜像然后下载
+
+docker pull reg.xingmeng.tb/test/busybox
 
 
 
