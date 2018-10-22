@@ -18,6 +18,31 @@ service docker status
 
 
 
+查看系统空间
+
+[root@Node03 ~]# docker system df
+TYPE                TOTAL               ACTIVE              SIZE                RECLAIMABLE
+Images              14                  4                   1.584GB             722.2MB (45%)
+Containers          8                   6                   2B                  0B (0%)
+Local Volumes       2                   2                   0B                  0B
+Build Cache         0                   0                   0B                  0B
+
+
+查看容器变化
+
+docker dff 容器名
+
+
+保存容器
+
+docker save 容器名 | gzip > 容器名.tar.gz
+
+导入容器 
+
+docker load -i 容器名.tar.gz
+
+
+
 1.列出所有容器基本信息
 docker container ps [OPTIONS]
 
