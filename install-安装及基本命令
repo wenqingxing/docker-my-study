@@ -18,6 +18,7 @@ service docker status
 
 
 
+
 查看系统空间
 
 [root@Node03 ~]# docker system df
@@ -33,6 +34,18 @@ Build Cache         0                   0                   0B                  
 docker dff 容器名
 
 
+查看容器状态
+
+[root@JAVA-pic-pro ~]# docker stats
+
+CONTAINER ID        NAME                CPU %               MEM USAGE / LIMIT     MEM %               NET I/O             BLOCK I/O           PIDS
+c0a705d20cd7        photo               89.52%              4.455GiB / 7.616GiB   58.49%              1.73GB / 4.41GB     174GB / 388MB       1918
+d0d603545b07        adv                 0.00%               432KiB / 7.616GiB     0.01%               152MB / 7.01GB      296MB / 0B          2
+4300e6686ed2        51ezg               0.00%               800KiB / 7.616GiB     0.01%               1.28MB / 30.7MB     1.45MB / 0B         2
+9bfa02392ce6        ad-api              0.02%               39MiB / 7.616GiB      0.50%               9.2GB / 1.16GB      8GB / 4.83MB        18
+8d141b251088        pic-api             0.65%               65.05MiB / 7.616GiB   0.83%               6.37GB / 2.39GB     11.5GB / 13.1MB     32
+00c725d235fa        ezc                 0.00%               764KiB / 7.616GiB     0.01%               71MB / 3.98GB       180MB / 0B          2
+26c102ca0ae2        jenkins             0.13%               967.5MiB / 7.616GiB   12.41%              159MB / 43.3MB      9.28GB / 78.3MB     47
 
 
 
