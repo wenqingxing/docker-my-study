@@ -1,1 +1,0 @@
-ls -p $MYSQDATADIR | grep / |tr -d / | grep -v -E 'mysql|performance_schema|test'
