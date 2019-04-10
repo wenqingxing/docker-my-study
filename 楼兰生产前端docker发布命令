@@ -131,3 +131,146 @@ docker run -d -p $OUTER_PORT:$INNER_PORT --restart=always --name=$CONTAINER_NAME
 
 
 
+
+
+
+
+
+
+
+
+delete_khugepageds.sh  deploy.sh  nginx_status.sh
+[root@JAVA-frontend-pro sh]# cat deploy.sh 
+#!/bin/bash
+
+docker pull 192.168.1.204:5000/maqiduo:production
+docker pull 192.168.1.204:5000/lola_ceramics:production
+docker pull 192.168.1.204:5000/like_peach:production
+docker pull 192.168.1.204:5000/kiki:production
+docker pull 192.168.1.204:5000/ezz168:production
+docker pull 192.168.1.204:5000/97ejk:production
+docker pull 192.168.1.204:5000/51exc:production
+docker pull 192.168.1.204:5000/97efx:production
+docker pull 192.168.1.204:5000/51etm:production
+
+
+echo "**********************项目名称列表*************************"
+echo "----------------------------------------------------------"
+echo "**********************1——e分销**************************"
+echo "----------------------------------------------------------"
+echo "**********************2——e进口*************************"
+echo "----------------------------------------------------------"
+echo "**********************3——e特卖*************************"
+echo "----------------------------------------------------------"
+echo "**********************4——e找砖*************************"
+echo "----------------------------------------------------------"
+echo "**********************5——kiki陶瓷**********************"
+echo "----------------------------------------------------------"
+echo "**********************6——杨桃满屋**********************"
+echo "----------------------------------------------------------"
+echo "**********************7——楼兰陶瓷**********************"
+echo "----------------------------------------------------------"
+echo "**********************8——玛奇朵************************"
+echo "----------------------------------------------------------"
+echo "**********************9——e选材*************************"
+echo "----------------------------------------------------------"
+
+
+read -p "请选择您要更新的项目代码，如1、2.....：" choose
+case $choose in
+    1)
+    echo "你选择要更新的项目是:e分销"
+    echo "5秒确认时间，如果有误，请按ctrl+C取消 "
+    sleep 5
+    if docker ps -a | grep -i 97efx;then
+    docker container rm -f 97efx
+    fi
+    docker run -d -p 8012:80 --restart=always --name=97efx 192.168.1.204:5000/97efx:production
+    ;;
+
+    2)
+    echo "你选择要更新的项目是:e进口"
+    echo "5秒确认时间，如果有误，请按ctrl+C取消 "
+    sleep 5
+    if docker ps -a | grep -i 97ejk;then
+    docker container rm -f 97ejk
+    fi
+    docker run -d -p 8013:80 --restart=always --name=97ejk 192.168.1.204:5000/97ejk:production
+    ;;
+
+    3)
+    echo "你选择要更新的项目是:e特卖"
+    echo "5秒确认时间，如果有误，请按ctrl+C取消 "
+    sleep 5
+    if docker ps -a | grep -i 51etm;then
+    docker container rm -f 51etm
+    fi
+    docker run -d -p 8010:80 --restart=always --name=51etm 192.168.1.204:5000/51etm:production
+    ;;
+
+    4)
+    echo "你选择要更新的项目是:e找砖"
+    echo "5秒确认时间，如果有误，请按ctrl+C取消 "
+    sleep 5
+    if docker ps -a | grep -i ezz168;then
+    docker container rm -f ezz168
+    fi
+    docker run -d -p 8016:80 --restart=always --name=ezz168 192.168.1.204:5000/ezz168:production
+    ;;
+
+    5)
+    echo "你选择要更新的项目是:kiki陶瓷"
+    echo "5秒确认时间，如果有误，请按ctrl+C取消 "
+    sleep 5
+    if docker ps -a | grep -i kiki;then
+    docker container rm -f kiki
+    fi
+    docker run -d -p 8020:80 --restart=always --name=kiki 192.168.1.204:5000/kiki:production
+    ;;
+
+    6)
+    echo "你选择要更新的项目是:杨桃满屋"
+    echo "5秒确认时间，如果有误，请按ctrl+C取消 "
+    sleep 5
+    if docker ps -a | grep -i like_peach;then
+    docker container rm -f like_peach
+    fi
+    docker run -d -p 8021:80 --restart=always --name=like_peach 192.168.1.204:5000/like_peach:production
+    ;;
+
+    7)
+    echo "你选择要更新的项目是:楼兰陶瓷"
+    echo "5秒确认时间，如果有误，请按ctrl+C取消 "
+    sleep 5
+    if docker ps -a | grep -i lola_ceramics;then
+    docker container rm -f lola_ceramics
+    fi
+    docker run -d -p 8022:80 --restart=always --name=lola_ceramics 192.168.1.204:5000/lola_ceramics:production
+    ;;
+
+    8)
+    echo "你选择要更新的项目是:玛奇朵"
+    echo "5秒确认时间，如果有误，请按ctrl+C取消 "
+    sleep 5
+    if docker ps -a | grep -i maqiduo;then
+    docker container rm -f maqiduo
+    fi
+    docker run -d -p 8023:80 --restart=always --name=maqiduo 192.168.1.204:5000/maqiduo:production
+    ;;
+
+    9)
+    echo "你选择要更新的项目是:e选材"
+    echo "5秒确认时间，如果有误，请按ctrl+C取消 "
+    sleep 5
+    if docker ps -a | grep -i 51exc;then
+    docker container rm -f 51exc
+    fi
+    docker run -d -p 8011:80 --restart=always --name=51exc 192.168.1.204:5000/51exc:production
+    ;;
+
+    *)
+    echo "无法识别项目名称"
+    exit
+    ;;
+esac
+
