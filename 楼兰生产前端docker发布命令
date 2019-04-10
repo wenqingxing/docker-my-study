@@ -274,3 +274,18 @@ case $choose in
     ;;
 esac
 
+
+
+[root@JAVA-frontend-pro sh]# docker ps
+CONTAINER ID        IMAGE                                         COMMAND                  CREATED             STATUS              PORTS                                       NAMES
+bafa68bbeb8e        192.168.1.204:5000/maqiduo:production         "nginx -g 'daemon of…"   4 months ago        Up 7 hours          0.0.0.0:8018->80/tcp                        maqiduo
+f9b9040be33c        192.168.1.204:5000/lola_ceramics:production   "nginx -g 'daemon of…"   4 months ago        Up 7 hours          0.0.0.0:8017->80/tcp                        lola_ceramics
+d79a46f2a18a        192.168.1.204:5000/like_peach:production      "nginx -g 'daemon of…"   4 months ago        Up 7 hours          0.0.0.0:8016->80/tcp                        like_peach
+eb885e2ae69e        192.168.1.204:5000/kiki:production            "nginx -g 'daemon of…"   4 months ago        Up 7 hours          0.0.0.0:8015->80/tcp                        kiki
+e64f1b528813        192.168.1.204:5000/ezz168:production          "nginx -g 'daemon of…"   4 months ago        Up 7 hours          0.0.0.0:8014->80/tcp                        ezz168
+159546caba1c        192.168.1.204:5000/97efx:production           "nginx -g 'daemon of…"   4 months ago        Up 7 hours          0.0.0.0:8012->80/tcp                        97efx
+969e9864d611        192.168.1.204:5000/51exc:production           "nginx -g 'daemon of…"   4 months ago        Up 7 hours          0.0.0.0:8011->80/tcp                        51exc
+e626a75b970e        192.168.1.204:5000/51etm:production           "nginx -g 'daemon of…"   4 months ago        Up 7 hours          0.0.0.0:8010->80/tcp                        51etm
+db627119305e        192.168.1.204:5000/97ejk:production           "nginx -g 'daemon of…"   4 months ago        Up 7 hours          0.0.0.0:8013->80/tcp                        97ejk
+5403613f1064        registry:2                                    "/entrypoint.sh /etc…"   8 months ago        Up 7 hours          0.0.0.0:5000->5000/tcp                      registry
+f1f795689a0e        csphere/jenkins:1.609                         "/usr/local/bin/jenk…"   8 months ago        Up 2 minutes        22/tcp, 50000/tcp, 0.0.0.0:8080->8080/tcp   jenkins
