@@ -72,3 +72,9 @@ redis-cli --cluster create 192.168.1.200:7000 192.168.1.200:7001 192.168.1.200:7
 spring.redis.cluster.nodes=192.168.1.200:7000,192.168.1.200:7001,192.168.1.200:7002,192.168.1.200:7003,192.168.1.200:7004,192.168.1.200:7005
 spring.redis.host、spring.redis.port可以不要了
  
+
+
+删除集群
+
+docker ps | grep redis | awk '{print $1}' | xargs docker rm -f
+
