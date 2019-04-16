@@ -1,3 +1,6 @@
+https://blog.csdn.net/haerxiong/article/details/85064502
+
+
 目标
 在linux主机是，使用Docker搭建redis cluster集群（含主从），使用本地java访问redis集群
 
