@@ -9,6 +9,7 @@ sed -i 'n;12aEnvironmentFile=-/etc/docker/daemon.json' /lib/systemd/system/docke
 
 systemctl daemon-reload
 service docker restart
+service docker status
 
 
 
