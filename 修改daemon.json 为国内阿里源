@@ -1,0 +1,2 @@
+[root@i-vzdytl5t ~]# cat /etc/docker/daemon.json
+{"registry-mirrors": ["http://579fe187.m.daocloud.io","https://pee6w651.mirror.aliyuncs.com"]}
