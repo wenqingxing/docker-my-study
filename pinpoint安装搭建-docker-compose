@@ -3,6 +3,19 @@ C:\Users\huangxin\Desktop\资料\pinpoint安装搭建\pinpoint-docker-compose-in
 
 
 
+unzip pinpoint-docker-compose-install.zip
+cd pinpoint-docker-compose-install/
+docker load -i pinpoint-all-image.tar
+
+cd pinpoint-docker-compose-install
+mv docker-compose /usr/local/bin/
+cd pinpoint-docker
+docker-compose pull && docker-compose up -d
+
+
+----------------------------------------------------------------
+
+
 提前安装docker-compose
 
 官网参考：
