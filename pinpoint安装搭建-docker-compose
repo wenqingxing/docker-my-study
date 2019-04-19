@@ -26,7 +26,7 @@ https://github.com/naver/pinpoint-docker#testing-quickstart-application
 mv docker-compose /usr/local/bin/
 
 
-git clone https://github.com/naver/pinpoint-docker.git
+## git clone https://github.com/naver/pinpoint-docker.git
 cd pinpoint-docker
 docker-compose pull && docker-compose up -d
 
@@ -39,6 +39,28 @@ http://192.168.238.198:8000/
 
 
 Pinpoint Agent 安装与使用
+
+
+docker 镜像构建时要把pinpoint-agent解压后的把放进去，启动时要用这个路径去启动
+
+COPY pinpoint-agent /pinpoint-agent
+
+jar 启动时需要添加的参数
+"-javaagent:/pinpoint-agent/pinpoint-bootstrap-1.8.3.jar","-Dpinpoint.agentId=tplmo-channel","-Dpinpoint.applicationName=tplmo-channel",
+
+说明：
+-javaagent:/pinpoint-agent/pinpoint-bootstrap-1.8.3.jar  (注意路径)
+-Dpinpoint.agentId=tplmo-channel（名字随便填）
+-Dpinpoint.applicationName=tplmo-channel（名字随便填）
+
+
+
+
+
+
+下面资料参考用
+
+
 
 官网参数
 
