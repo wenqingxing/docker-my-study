@@ -11,24 +11,12 @@ docker load -i pinpoint-all-image.tar
 
 cd pinpoint-docker-compose-install
 mv docker-compose /usr/local/bin/
+chmod +x /usr/local/bin/docker-compose
 cd pinpoint-docker
 docker-compose pull && docker-compose up -d
 
 
-----------------------------------------------------------------
 
-
-提前安装docker-compose
-
-官网参考：
-https://github.com/naver/pinpoint-docker#testing-quickstart-application
-
-mv docker-compose /usr/local/bin/
-
-
-## git clone https://github.com/naver/pinpoint-docker.git
-cd pinpoint-docker
-docker-compose pull && docker-compose up -d
 
 web  访问
 
@@ -38,7 +26,8 @@ http://192.168.238.198:8000/
 
 
 
-Pinpoint Agent 安装与使用
+
+Pinpoint Agent 部署
 
 
 docker 镜像构建时要把pinpoint-agent解压后的把放进去，启动时要用这个路径去启动
@@ -55,7 +44,22 @@ jar 启动时需要添加的参数
 
 
 
+完
+----------------------------------------------------------------
 
+
+
+
+
+
+提前安装docker-compose
+
+官网参考：
+https://github.com/naver/pinpoint-docker#testing-quickstart-application
+mv docker-compose /usr/local/bin/
+## git clone https://github.com/naver/pinpoint-docker.git
+cd pinpoint-docker
+docker-compose pull && docker-compose up -d
 
 
 下面资料参考用
