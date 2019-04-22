@@ -29,8 +29,11 @@ http://192.168.238.198:8000/
 
 Pinpoint Agent 部署
 
+解压inpoint-agent-1.8.3，改名
 
-docker 镜像构建时要把pinpoint-agent解压后的把放进去，启动时要用这个路径去启动
+mv inpoint-agent-1.8.3 inpoint-agent
+
+docker 镜像构建时要把pinpoint-agent解压后的把放进去，启动时要用这个路径去启动,Dockerfile 处理方式
 
 COPY pinpoint-agent /pinpoint-agent
 
