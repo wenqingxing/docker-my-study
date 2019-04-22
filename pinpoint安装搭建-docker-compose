@@ -29,6 +29,12 @@ http://192.168.238.198:8000/
 
 Pinpoint Agent 部署
 
+注意：如果是应用和pinpoint-collector部署在不同服务器，pinpoint.config需要修改pinpoint-collector的ip
+profiler.collector.ip=127.0.0.1
+
+
+
+
 解压inpoint-agent-1.8.3，改名
 
 mv inpoint-agent-1.8.3 inpoint-agent
