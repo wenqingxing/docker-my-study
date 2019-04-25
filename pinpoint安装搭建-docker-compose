@@ -104,6 +104,117 @@ java -jar ${JAVA_OPTS} ${PINPOINT_OPTS} /opt/store-demo-*.jar
 
 
 
+修改数据库相关参数，数据保存时间
+
+
+进入容器
+docker exec -it pinpoint-hbase bash
+
+
+进入hbase数据库
+/opt/hbase/hbase-1.2.6/bin/hbase shell
+
+
+
+ ================ 设置 TraceV2  表,修改保存天数为1天 ================ 
+
+查看表内容
+hbase(main):003:0> describe 'TraceV2'
+
+
+
+统计表内所有内容
+hbase(main):003:0> count 'TraceV2' 
+
+
+删除表的所有资料
+hbase(main):004:0> truncate 'TraceV2'
+
+
+
+设置 ttl（改）--测试修改成功
+
+hbase(main):004:0> disable "TraceV2"  #禁用表
+0 row(s) in 2.3380 seconds
+ 
+hbase(main):005:0> alter "TraceV2",NAME=>'S',TTL=>'86400' #设置TTL值，作用于列族data
+Updating all regions with the new schema...
+1/1 regions updated.
+Done.
+0 row(s) in 1.9510 seconds
+ 
+hbase(main):006:0> enable  "TraceV2"  #恢复表
+
+
+
+
+ ================ 设置 AgentStatV2  表,修改保存天数为1天 ================ 
+
+
+查看表内容
+hbase(main):003:0> describe 'AgentStatV2'
+
+
+
+统计表内所有内容
+hbase(main):003:0> count 'AgentStatV2' 
+
+
+删除表的所有资料
+hbase(main):004:0> truncate 'AgentStatV2'
+
+
+
+设置 ttl（改）--测试修改成功
+
+hbase(main):004:0> disable "AgentStatV2"  #禁用表
+0 row(s) in 2.3380 seconds
+ 
+hbase(main):005:0> alter "AgentStatV2",NAME=>'S',TTL=>'86400' #设置TTL值，作用于列族data
+Updating all regions with the new schema...
+1/1 regions updated.
+Done.
+0 row(s) in 1.9510 seconds
+ 
+hbase(main):006:0> enable  "AgentStatV2"  #恢复表
+
+
+
+
+
+
+
+ ================ 设置 ApplicationTraceIndex  表,修改保存天数为1天 ================ 
+
+
+查看表内容
+hbase(main):003:0> describe 'ApplicationTraceIndex'
+
+
+
+统计表内所有内容
+hbase(main):003:0> count 'ApplicationTraceIndex' 
+
+
+删除表的所有资料
+hbase(main):004:0> truncate 'ApplicationTraceIndex'
+
+
+
+设置 ttl（改）--测试修改成功
+
+hbase(main):004:0> disable "ApplicationTraceIndex"  #禁用表
+0 row(s) in 2.3380 seconds
+ 
+hbase(main):005:0> alter "ApplicationTraceIndex",NAME=>'I',TTL=>'86400' #设置TTL值，作用于列族data
+Updating all regions with the new schema...
+1/1 regions updated.
+Done.
+0 row(s) in 1.9510 seconds
+ 
+hbase(main):006:0> enable  "ApplicationTraceIndex"  #恢复表
+
+
 
 
 
