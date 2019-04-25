@@ -53,54 +53,6 @@ jar 启动时需要添加的参数
 
 
 
-完
-----------------------------------------------------------------
-
-
-
-
-
-
-提前安装docker-compose
-
-官网参考：
-https://github.com/naver/pinpoint-docker#testing-quickstart-application
-mv docker-compose /usr/local/bin/
-## git clone https://github.com/naver/pinpoint-docker.git
-cd pinpoint-docker
-docker-compose pull && docker-compose up -d
-
-
-下面资料参考用
-
-
-
-官网参数
-
--javaagent:$AGENT_PATH/pinpoint-bootstrap-$VERSION.jar
--Dpinpoint.agentId
--Dpinpoint.applicationName
-
-
-获取上面参数的方式：
-
-[root@localhost pinpoint-docker]# docker exec -it  pinpoint-quickstart bash
-
-root@41706728aeea:/usr/local/tomcat# env
-
-JAVA_OPTS=-javaagent:/pinpoint-agent/pinpoint-bootstrap-1.8.3.jar -Dpinpoint.agentId=app-in-docker -Dpinpoint.applicationName=quickapp
-
-
-
-
-JAVA_OPTS=" -Duser.timezone=\"Asia/Shanghai\" -Djava.awt.headless=true -Djava.net.preferIPv4Stack=true"
-
-PINPOINT_OPTS=" -javaagent:/opt/pinpoint/pinpoint-bootstrap-*.jar -Dpinpoint.agentId=store-demo-agent01 \
-    -Dpinpoint.applicationName=store-demo"
-
-java -jar ${JAVA_OPTS} ${PINPOINT_OPTS} /opt/store-demo-*.jar
- 
-
 
 
 
@@ -181,9 +133,6 @@ hbase(main):006:0> enable  "AgentStatV2"  #恢复表
 
 
 
-
-
-
  ================ 设置 ApplicationTraceIndex  表,修改保存天数为1天 ================ 
 
 
@@ -216,6 +165,55 @@ hbase(main):006:0> enable  "ApplicationTraceIndex"  #恢复表
 
 
 
+
+
+
+
+
+
+
+完
+----------------------------------------------------------------
+
+
+以下内容参考用
+
+
+提前安装docker-compose
+
+官网参考：
+https://github.com/naver/pinpoint-docker#testing-quickstart-application
+mv docker-compose /usr/local/bin/
+## git clone https://github.com/naver/pinpoint-docker.git
+cd pinpoint-docker
+docker-compose pull && docker-compose up -d
+
+
+官网参数
+
+-javaagent:$AGENT_PATH/pinpoint-bootstrap-$VERSION.jar
+-Dpinpoint.agentId
+-Dpinpoint.applicationName
+
+
+获取上面参数的方式：
+
+[root@localhost pinpoint-docker]# docker exec -it  pinpoint-quickstart bash
+
+root@41706728aeea:/usr/local/tomcat# env
+
+JAVA_OPTS=-javaagent:/pinpoint-agent/pinpoint-bootstrap-1.8.3.jar -Dpinpoint.agentId=app-in-docker -Dpinpoint.applicationName=quickapp
+
+
+
+
+JAVA_OPTS=" -Duser.timezone=\"Asia/Shanghai\" -Djava.awt.headless=true -Djava.net.preferIPv4Stack=true"
+
+PINPOINT_OPTS=" -javaagent:/opt/pinpoint/pinpoint-bootstrap-*.jar -Dpinpoint.agentId=store-demo-agent01 \
+    -Dpinpoint.applicationName=store-demo"
+
+java -jar ${JAVA_OPTS} ${PINPOINT_OPTS} /opt/store-demo-*.jar
+ 
 
 
 
