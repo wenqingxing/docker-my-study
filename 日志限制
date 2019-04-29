@@ -1,15 +1,14 @@
 
 
 
-vim /etc/docker/daemon.json
+[root@Node docker]# cat daemon.json 
 
 
 {
-  "log-driver": "json-file",
-  "log-opts": {
-    "max-size": "10m",
-    "max-file": "3"
-  }
+  "registry-mirrors": ["https://registry.docker-cn.com"],
+  "insecure-registries": ["192.168.238.171:5000"],
+  "log-driver":"json-file",
+  "log-opts": {"max-size":"500m", "max-file":"3"}
 }
 
 
