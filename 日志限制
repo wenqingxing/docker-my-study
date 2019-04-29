@@ -1,4 +1,8 @@
+
+
+
 vim /etc/docker/daemon.json
+
 
 {
   "log-driver": "json-file",
@@ -7,3 +11,12 @@ vim /etc/docker/daemon.json
     "max-file": "3"
   }
 }
+
+
+
+ systemctl daemon-reload
+ systemctl restart docker
+ 
+ 
+ 
+ 
