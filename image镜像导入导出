@@ -11,7 +11,7 @@ docker load -i 容器名.tar.gz
 
 批量打包镜像,将机器上的所有镜像打包到haha.tar文件里面。
 
-# docker save $(docker images | grep -v REPOSITORY | awk 'BEGIN{OFS=":";ORS=" "}{print $1,$2}') -o haha.tar
+ docker save $(docker images | grep -v REPOSITORY | awk 'BEGIN{OFS=":";ORS=" "}{print $1,$2}') -o haha.tar
 
 导入镜像：
 
