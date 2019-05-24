@@ -1,0 +1,17 @@
+$ df -h
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sda2        98G  2.8G   95G   3% /
+devtmpfs         63G     0   63G   0% /dev
+/dev/sda5      1015G  8.8G 1006G   1% /tol
+/dev/sda1       197M  161M   37M  82% /boot
+
+# 2.选择比较大的分区（我这里是/tol）
+$ mkdir -p /tol/docker-data
+$ cat <<EOF > /etc/docker/daemon.json
+{
+    "graph": "/tol/docker-data"
+}
+EOF
+
+# 启动docker服务
+service docker restart
